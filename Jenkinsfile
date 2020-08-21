@@ -40,7 +40,7 @@ spec:
                 sh '''
                         arr="${objects_list}"
                         echo $arr
-                        IFS=' ' read -ra objects <<< "${objects_list}"
+                        for i in $arr; do echo "$i zzz"; done
                 '''
             }
         }
