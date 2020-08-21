@@ -37,10 +37,9 @@ spec:
                 AWS_SECRET_ACCESS_KEY = credentials('aws_secret_key')
             }
             steps {
-                bash """
-                        IFS=' ' read -ra objects <<< "${objects_list}"
-                        IFS=' ' read -ra read_users <<< "${read_users_list}"
-                        IFS=' ' read -ra readwrite_users <<< "${readwrite_users_list}"
+                sh """
+                        arr="${objects_list}"
+                        echo arr
                 """
             }
         }
