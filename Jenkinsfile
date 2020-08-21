@@ -38,9 +38,11 @@ spec:
             }
             steps {
                 sh '''
-                        arr="${objects_list}"
-                        string='Paris, France, Europe'
-                        readarray -td, a <<<"$string"; declare -p a
+                        IFS=' '; read -r -a array <<EOF
+${objects_list}
+EOF
+                        echo ${#array[@]}
+                        echo ${array[2]}
                 '''
             }
         }
