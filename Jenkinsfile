@@ -41,6 +41,7 @@ spec:
                         arr="${objects_list}"
                         echo $arr
                         for i in $arr; do echo "$i zzz"; done
+                        echo ${#arr[@]}
                 '''
             }
         }
