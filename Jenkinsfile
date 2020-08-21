@@ -37,10 +37,10 @@ spec:
                 AWS_SECRET_ACCESS_KEY = credentials('aws_secret_key')
             }
             steps {
-                sh """
+                sh '''
                         arr="${objects_list}"
-                        echo arr
-                """
+                        echo $arr
+                '''
             }
         }
     }
