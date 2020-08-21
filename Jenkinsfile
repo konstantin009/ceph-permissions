@@ -38,7 +38,7 @@ spec:
             }
             steps {
                 sh '''
-                        IFS=' '; read -r -a array <<EOF
+                        IFS=' '; read -r array <<EOF
 ${objects_list}
 EOF
                         echo ${#array[@]}
