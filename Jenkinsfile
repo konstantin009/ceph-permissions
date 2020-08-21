@@ -39,9 +39,8 @@ spec:
             steps {
                 sh '''
                         arr="${objects_list}"
-                        echo $arr
-                        for i in $arr; do echo "$i zzz"; done
-                        echo ${#arr[@]}
+                        arr2=($(echo "$arr" | tr ' ' '\n'))
+                        echo ${#arr2[@]}
                 '''
             }
         }
