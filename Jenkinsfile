@@ -39,8 +39,8 @@ spec:
             steps {
                 sh '''
                         arr="${objects_list}"
-                        arr2=($(echo "$arr" | tr ' ' '\n'))
-                        echo ${#arr2[@]}
+                        string='Paris, France, Europe'
+                        readarray -td, a <<<"$string"; declare -p a
                 '''
             }
         }
