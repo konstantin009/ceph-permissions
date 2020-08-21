@@ -42,7 +42,6 @@ spec:
 ${objects_list}
 EOF
                         echo ${#array[@]}
-                        echo ${array[2]}
                 '''
             }
         }
