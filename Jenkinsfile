@@ -38,8 +38,9 @@ spec:
             }
             steps {
                 sh '''
+                        a=${objects_list}
                         IFS=" "; read -r array <<EOF
-${objects_list}
+$a
 EOF
                         echo ${#array[@]}
                 '''
