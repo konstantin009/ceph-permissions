@@ -37,10 +37,34 @@ spec:
                 AWS_SECRET_ACCESS_KEY = credentials('aws_secret_key')
             }
             steps {
-                sh '''#!/bin/bash
-                      readarray -td, objects <<<${objects_list}
-                      declare -p objects
-                      echo ${#objects[@]}
+                sh '''
+                        #!/bin/bash
+                        IFS=' ' read -ra objects <<< "${objects_list}"
+                        IFS=' ' read -ra read_users <<< "${read_users_list}"
+                        IFS=' ' read -ra readwrite_users <<< "${readwrite_users_list}"
+                        if [[ ${#objects[@]} -eq 0 ]]; then
+                            echo "ERROR: object_list parameter is empty"
+                            exit 1
+                        else
+                            if [[ ${#read_users[@]} -eq 0 ]]; then
+                                echo "NOTICE: No users with read permissions are specified"
+                            else
+                                for user in ${read_users[@]}; do
+                                    for object in ${objects[@]}; do
+                                        echo "INFO: read permission has been set for the user $user to the object $object"
+                                    done
+                                done
+                            fi
+                            if [[ ${#readwrite_users[@]} -eq 0 ]]; then
+                                echo "NOTICE: No users with read&write permissions are specified"
+                            else
+                                for user in ${readwrite_users[@]}; do
+                                    for object in ${objects[@]}; do
+                                        echo "INFO: read&write permission has been set for the user $user to the object $object"
+                                    done
+                                done
+                            fi
+                        fi
                 '''
             }
         }
