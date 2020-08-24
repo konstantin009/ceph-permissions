@@ -37,17 +37,28 @@ spec:
             }
             steps {
                 sh '''#!/bin/bash
-                      set -x
                       readarray -td' ' buckets <<<${buckets_list}; declare -p buckets
                       readarray -td' ' read_users <<<${read_users_list}; declare -p read_users
                       readarray -td' ' readwrite_users <<<${readwrite_users_list}; declare -p readwrite_users
-                      echo tt
                       if [[ ${#buckets[@]} -eq 0 ]]; then
                           echo "ERROR: buckets_list parameter is empty"
                           exit 1
                       else
-                          echo yy
                           for bucket in ${buckets[@]}; do 
+                              if [[ ${#read_users[@]} -eq 0 ]]; then
+                                  echo "NOTICE: No users with read permissions are specified"
+                              else
+                                  for user in ${read_users[@]}; do
+                                      read_principals="${read_principals}\"arn:aws:iam:::user/${user}\",\n"
+                                  done
+                              fi
+                              if [[ ${#readwrite_users[@]} -eq 0 ]]; then
+                                  echo "NOTICE: No users with read&write permissions are specified"
+                              else
+                                  for user in ${readwrite_users[@]}; do
+                                      readwrite_principals="${readwrite_principals}\"arn:aws:iam:::user/${user}\",\n"
+                                  done
+                              fi
                               echo """
 { 
   "Version": "2012-10-17",
@@ -56,22 +67,35 @@ spec:
       "Effect":  "Allow",
       "Principal":  {
         "AWS":  [
-          "arn:aws:iam:::user/acltestuser1"
+$(echo -e $read_principals)
+        ]
+      },
+      "Action": "s3:GetObject",
+      "Resource": [
+        "arn:aws:s3:::${bucket}",
+        "arn:aws:s3:::${bucket}/*"
+      ]
+    },
+    {
+      "Effect":  "Allow",
+      "Principal":  {
+        "AWS":  [
+$(echo -e $readwrite_principals)
         ]
       },
       "Action": "s3:*",
       "Resource": [
-        "arn:aws:s3:::aclrestbucket2",
-        "arn:aws:s3:::aclrestbucket2/*"
+        "arn:aws:s3:::${bucket}",
+        "arn:aws:s3:::${bucket}/*"
       ]
-    }
+    },
   ]
 }
 """ > ${bucket}_policy.txt
-              cat ${bucket}_policy.txt
-              done
-              fi
-              '''
+                          cat ${bucket}_policy.txt
+                          done
+                      fi
+                '''
             }
         }
     }
