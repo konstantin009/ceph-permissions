@@ -45,7 +45,7 @@ spec:
                               else
                                   read_principals="\"arn:aws:iam:::user/${read_users[0]}\""
                                   for (( i=1; i<${#read_users[@]}; i++ )); do
-                                      read_principals="${read_principals},\n\\\"arn:aws:iam:::user/${read_users[$i]}\\\""
+                                      read_principals="${read_principals},\n\\"arn:aws:iam:::user/${read_users[$i]}\\""
                                   done
                               fi
                               if [[ ${#readwrite_users[@]} -eq 0 ]]; then
@@ -53,7 +53,7 @@ spec:
                               else
                                   readwrite_principals="\"arn:aws:iam:::user/${readwrite_users[0]}\""
                                   for (( i=1; i<${#readwrite_users[@]}; i++ )); do
-                                      readwrite_principals="${readwrite_principals},\n\\\"arn:aws:iam:::user/${readwrite_users[$i]}\\\""
+                                      readwrite_principals="${readwrite_principals},\n\\"arn:aws:iam:::user/${readwrite_users[$i]}\\""
                                   done
                               fi
                               for bucket in ${buckets[@]}; do
