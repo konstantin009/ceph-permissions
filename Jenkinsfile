@@ -70,7 +70,15 @@ spec:
 $(echo -e $read_principals | sed 's/ //')
         ]
       },
-      \\\"Action\\\": \\\"s3:GetObject\\\",
+      \\\"Action\\\": [
+        \\\"s3:ListBucket\\\",
+        \\\"s3:ListBucketVersions\\\",
+        \\\"s3:GetObject\\\",
+        \\\"s3:GetObjectVersion\\\",
+        \\\"s3:GetObjectAcl\\\",
+        \\\"s3:GetBucketPolicy\\\",
+        \\\"s3:GetBucketAcl\\\"
+        ],
       \\\"Resource\\\": [
         \\\"arn:aws:s3:::${bucket}\\\",
         \\\"arn:aws:s3:::${bucket}/*\\\"
