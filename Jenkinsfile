@@ -17,8 +17,8 @@ spec:
     parameters {
         string(name: 'aws_host', defaultValue: 'rookceph.datalake-dev.bss.net.sap:50070', description: 'Storage endpoint')
         string(name: 'buckets_list', description: 'List of buckets to set policies for.  Example: "bucket1 bucket2 bucket3"')
-        string(name: 'read_users_list', description: 'List of users which for which read permission will be set.  Example: "acltestuser1 acltestuser3"')
-        string(name: 'readwrite_users_list', description: 'List of users which for which read&write permission will be set.  Example: "acltestuser2"')
+        string(name: 'read_users_list', description: 'List of users for which read permission will be set.  Example: "acltestuser1 acltestuser3"')
+        string(name: 'readwrite_users_list', description: 'List of users for which read&write permission will be set.  Example: "acltestuser2"')
     }
     options {
         disableConcurrentBuilds()
