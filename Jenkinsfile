@@ -16,10 +16,9 @@ spec:
     }
     parameters {
         string(name: 'aws_host', defaultValue: 'rookceph.datalake-dev.bss.net.sap:50070', description: 'Storage endpoint')
-        string(name: 'bucket', defaultValue: 'di3', description: 'Storage bucket name')
-        string(name: 'objects_list', description: 'List of objects (files/folders) to set permissions for.  Example: "/acltest/file1 /acltest/folder2"')
-        string(name: 'read_users_list', description: 'List of users which for which read permission will be set.  Example: "acltestuser1@sap.com acltestuser3@sap.com"')
-        string(name: 'readwrite_users_list', description: 'List of users which for which read&write permission will be set.  Example: "acltestuser2@sap.com"')
+        string(name: 'buckets_list', description: 'List of buckets to set policies for.  Example: "bucket1 bucket2 bucket3"')
+        string(name: 'read_users_list', description: 'List of users which for which read permission will be set.  Example: "acltestuser1 acltestuser3"')
+        string(name: 'readwrite_users_list', description: 'List of users which for which read&write permission will be set.  Example: "acltestuser2"')
     }
     options {
         disableConcurrentBuilds()
@@ -38,33 +37,34 @@ spec:
             }
             steps {
                 sh '''#!/bin/bash
-                      readarray -td' ' objects <<<${objects_list}; declare -p objects
+                      readarray -td' ' buckets <<<${buckets_list}; declare -p buckets
                       readarray -td' ' read_users <<<${read_users_list}; declare -p read_users
                       readarray -td' ' readwrite_users <<<${readwrite_users_list}; declare -p readwrite_users
-                      if [[ ${#objects[@]} -eq 0 ]]; then
-                          echo "ERROR: object_list parameter is empty"
+                      if [[ ${#buckets[@]} -eq 0 ]]; then
+                          echo "ERROR: buckets_list parameter is empty"
                           exit 1
                       else
-                          if [[ ${#read_users[@]} -eq 0 ]]; then
-                              echo "NOTICE: No users with read permissions are specified"
-                          else
-                              for user in ${read_users[@]}; do
-                                  for object in ${objects[@]}; do
-                                      echo "INFO: read permission has been set for the user $user to the object $object"
-                                  done
-                              done
-                          fi
-                          if [[ ${#readwrite_users[@]} -eq 0 ]]; then
-                              echo "NOTICE: No users with read&write permissions are specified"
-                          else
-                              for user in ${readwrite_users[@]}; do
-                                  for object in ${objects[@]}; do
-                                      echo "INFO: read&write permission has been set for the user $user to the object $object"
-                                  done
-                              done
-                          fi
-                      fi
-                '''
+                          for bucket in ${buckets[@]}; do 
+                              echo """
+{ 
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect":  "Allow",
+      "Principal":  {
+        "AWS":  [
+          "arn:aws:iam:::user/acltestuser1"
+        ]
+      },
+      "Action": "s3:*",
+      "Resource": [
+        "arn:aws:s3:::aclrestbucket2",
+        "arn:aws:s3:::aclrestbucket2/*"
+      ]
+    }
+  ]
+}
+""" > ${bucket}_policy.txt
             }
         }
     }
