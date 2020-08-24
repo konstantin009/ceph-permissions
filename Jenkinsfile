@@ -38,8 +38,9 @@ spec:
             }
             steps {
                 sh '''#!/bin/bash
-                          objects=("$(echo ${objects_list} | sed 's/,/ /g'"))
-                          echo ${#objects[@]}
+                      string='Paris, France, Europe';
+                      readarray -td, a <<<"$string"; declare -p a;
+                      echo ${a[1]}
                 '''
             }
         }
