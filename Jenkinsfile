@@ -69,6 +69,7 @@ spec:
 }
 """ > ${bucket}_policy.txt
               cat ${bucket}_policy.txt
+              fi
               '''
             }
         }
