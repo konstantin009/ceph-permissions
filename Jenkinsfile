@@ -37,6 +37,9 @@ spec:
                           readarray -td' ' buckets <<<${buckets_list}; declare -p buckets
                           readarray -td' ' read_users <<<${read_users_list}; declare -p read_users
                           readarray -td' ' readwrite_users <<<${readwrite_users_list}; declare -p readwrite_users
+                          IFS=' ' read -r -a array <<< ${buckets_list}
+                          echo ${#array[@]}
+                          echo ${#buckets[@]}
                           if [[ ${#buckets[@]} -eq 0 ]]; then
                               echo "ERROR: buckets_list parameter is empty"
                               exit 1
