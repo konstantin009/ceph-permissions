@@ -43,15 +43,17 @@ spec:
                               if [[ ${#read_users[@]} -eq 0 ]]; then
                                   echo "NOTICE: No users with read permissions are specified"
                               else
-                                  for user in ${read_users[@]}; do
-                                      read_principals="${read_principals}\"arn:aws:iam:::user/${user}\",\n"
+                                  read_principals="\"arn:aws:iam:::user/${read_users[0]}\""
+                                  for (( i=1; i<${#read_users[@]}; i++ )); do
+                                      read_principals="${read_principals},\n\"arn:aws:iam:::user/${read_users[$i]}\""
                                   done
                               fi
                               if [[ ${#readwrite_users[@]} -eq 0 ]]; then
                                   echo "NOTICE: No users with read&write permissions are specified"
                               else
-                                  for user in ${readwrite_users[@]}; do
-                                      readwrite_principals="${readwrite_principals}\"arn:aws:iam:::user/${user}\",\n"
+                                  readwrite_principals="\"arn:aws:iam:::user/${readwrite_users[0]}\""
+                                  for (( i=1; i<${#readwrite_users[@]}; i++ )); do
+                                      readwrite_principals="${readwrite_principals},\n\"arn:aws:iam:::user/${readwrite_users[$i]}\""
                                   done
                               fi
                               for bucket in ${buckets[@]}; do
