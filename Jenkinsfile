@@ -33,7 +33,6 @@ spec:
             steps {
                 container('inbound-agent-s3cmd') {
                     sh '''#!/bin/bash
-                          set -x
                           readarray -td' ' buckets <<<${buckets_list}; declare -p buckets
                           readarray -td' ' read_users <<<${read_users_list}; declare -p read_users
                           readarray -td' ' readwrite_users <<<${readwrite_users_list}; declare -p readwrite_users
@@ -46,7 +45,7 @@ spec:
                               else
                                   read_principals=" \\"arn:aws:iam:::user/${read_users[0]}\\" "
                                   for (( i=1; i<${#read_users[@]}; i++ )); do
-                                      read_principals="[ ${read_principals}, \\"arn:aws:iam:::user/${read_users[$i]}\\" ]"
+                                      read_principals="${read_principals}, \\"arn:aws:iam:::user/${read_users[$i]}\\""
                                   done
                               fi
                               if [[ ${#readwrite_users[@]} -eq 0 ]]; then
@@ -54,7 +53,7 @@ spec:
                               else
                                   readwrite_principals=" \\"arn:aws:iam:::user/${readwrite_users[0]}\\" "
                                   for (( i=1; i<${#readwrite_users[@]}; i++ )); do
-                                      readwrite_principals="[ ${readwrite_principals}, \\"arn:aws:iam:::user/${readwrite_users[$i]}\\" ]"
+                                      readwrite_principals="${readwrite_principals}, \\"arn:aws:iam:::user/${readwrite_users[$i]}\\""
                                   done
                               fi
                               for bucket in ${buckets[@]}; do
