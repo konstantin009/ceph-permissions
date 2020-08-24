@@ -37,7 +37,7 @@ spec:
                 AWS_SECRET_ACCESS_KEY = credentials('aws_secret_key')
             }
             steps {
-                bash '''
+                sh '''#!/bin/bash
                           objects=("$(echo ${objects_list} | sed 's/,/ /g'"))
                           echo ${#objects[@]}
                 '''
