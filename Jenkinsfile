@@ -38,9 +38,9 @@ spec:
             }
             steps {
                 sh '''#!/bin/bash
-                      string='Paris, France, Europe';
-                      readarray -td, a <<<"$string"; declare -p a;
-                      echo ${a[1]}
+                      readarray -td, objects <<<${objects_list}
+                      declare -p objects
+                      echo ${#objects[@]}
                 '''
             }
         }
