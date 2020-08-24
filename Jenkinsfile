@@ -38,32 +38,32 @@ spec:
             }
             steps {
                 sh '''#!/bin/bash
-                        readarray -td, objects <<<${objects_list}; declare -p objects
-                        readarray -td, read_users <<<${read_users_list}; declare -p objects
-                        readarray -td, readwrite_users <<<${readwrite_users_list}; declare -p objects
-                        if [[ ${#objects[@]} -eq 0 ]]; then
-                            echo "ERROR: object_list parameter is empty"
-                            exit 1
-                        else
-                            if [[ ${#read_users[@]} -eq 0 ]]; then
-                                echo "NOTICE: No users with read permissions are specified"
-                            else
-                                for user in ${read_users[@]}; do
-                                    for object in ${objects[@]}; do
-                                        echo "INFO: read permission has been set for the user $user to the object $object"
-                                    done
-                                done
-                            fi
-                            if [[ ${#readwrite_users[@]} -eq 0 ]]; then
-                                echo "NOTICE: No users with read&write permissions are specified"
-                            else
-                                for user in ${readwrite_users[@]}; do
-                                    for object in ${objects[@]}; do
-                                        echo "INFO: read&write permission has been set for the user $user to the object $object"
-                                    done
-                                done
-                            fi
-                        fi
+                      readarray -td' ' objects <<<${objects_list}; declare -p objects
+                      readarray -td' ' read_users <<<${read_users_list}; declare -p read_users
+                      readarray -td' ' readwrite_users <<<${readwrite_users_list}; declare -p readwrite_users
+                      if [[ ${#objects[@]} -eq 0 ]]; then
+                          echo "ERROR: object_list parameter is empty"
+                          exit 1
+                      else
+                          if [[ ${#read_users[@]} -eq 0 ]]; then
+                              echo "NOTICE: No users with read permissions are specified"
+                          else
+                              for user in ${read_users[@]}; do
+                                  for object in ${objects[@]}; do
+                                      echo "INFO: read permission has been set for the user $user to the object $object"
+                                  done
+                              done
+                          fi
+                          if [[ ${#readwrite_users[@]} -eq 0 ]]; then
+                              echo "NOTICE: No users with read&write permissions are specified"
+                          else
+                              for user in ${readwrite_users[@]}; do
+                                  for object in ${objects[@]}; do
+                                      echo "INFO: read&write permission has been set for the user $user to the object $object"
+                                  done
+                              done
+                          fi
+                      fi
                 '''
             }
         }
