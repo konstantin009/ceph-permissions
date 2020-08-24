@@ -37,8 +37,7 @@ spec:
                 AWS_SECRET_ACCESS_KEY = credentials('aws_secret_key')
             }
             steps {
-                sh '''
-                        #!/bin/bash
+                sh '''#!/bin/bash
                         readarray -td, objects <<<${objects_list}; declare -p objects
                         readarray -td, read_users <<<${read_users_list}; declare -p objects
                         readarray -td, readwrite_users <<<${readwrite_users_list}; declare -p objects
