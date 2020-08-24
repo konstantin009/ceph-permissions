@@ -25,14 +25,7 @@ spec:
         timeout(time: 1, unit: 'HOURS')
     }
     stages {
-        stage('Test') {
-            steps {
-                container('inbound-agent-s3cmd') {
-                    sh "s3cmd --version"
-                }
-            }
-        }
-        stage("Set users permissions") {
+        stage("Set bucket policies") {
             environment {
                 AWS_ACCESS_KEY_ID = credentials('aws_access_key')
                 AWS_SECRET_ACCESS_KEY = credentials('aws_secret_key')
