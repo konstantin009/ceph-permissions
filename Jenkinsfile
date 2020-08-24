@@ -45,7 +45,7 @@ spec:
                               else
                                   read_principals="\"arn:aws:iam:::user/${read_users[0]}\""
                                   for (( i=1; i<${#read_users[@]}; i++ )); do
-                                      read_principals="${read_principals},\n\"arn:aws:iam:::user/${read_users[$i]}\""
+                                      read_principals="${read_principals},\n\\\"arn:aws:iam:::user/${read_users[$i]}\\\""
                                   done
                               fi
                               if [[ ${#readwrite_users[@]} -eq 0 ]]; then
@@ -53,38 +53,38 @@ spec:
                               else
                                   readwrite_principals="\"arn:aws:iam:::user/${readwrite_users[0]}\""
                                   for (( i=1; i<${#readwrite_users[@]}; i++ )); do
-                                      readwrite_principals="${readwrite_principals},\n\"arn:aws:iam:::user/${readwrite_users[$i]}\""
+                                      readwrite_principals="${readwrite_principals},\n\\\"arn:aws:iam:::user/${readwrite_users[$i]}\\\""
                                   done
                               fi
                               for bucket in ${buckets[@]}; do
                                   echo """
 { 
-  \"Version\": \"2012-10-17\",
-  \"Statement\": [
+  \\\"Version\\\": \\\"2012-10-17\\\",
+  \\\"Statement\\\": [
     {
-      \"Effect\":  \"Allow\",
-      \"Principal\":  {
-        \"AWS\":  [
+      \\\"Effect\\\":  \\\"Allow\\\",
+      \\\"Principal\\\":  {
+        \\\"AWS\\\":  [
 $(echo -e $read_principals)
         ]
       },
-      \"Action\": \"s3:GetObject\",
-      \"Resource\": [
-        \"arn:aws:s3:::${bucket}\",
-        \"arn:aws:s3:::${bucket}/*\"
+      \\\"Action\": \\\"s3:GetObject\\\",
+      \\\"Resource\\\": [
+        \\\"arn:aws:s3:::${bucket}\\\",
+        \\\"arn:aws:s3:::${bucket}/*\\\"
       ]
     },
     {
-      \"Effect\":  \"Allow\",
-      \"Principal\":  {
-        \"AWS\":  [
+      \\\"Effect\\\":  \\\"Allow\\\",
+      \\\"Principal\\\":  {
+        \\\"AWS\\\":  [
 $(echo -e $readwrite_principals)
         ]
       },
-      \"Action\": \"s3:*\",
-      \"Resource\": [
-        \"arn:aws:s3:::${bucket}\",
-        \"arn:aws:s3:::${bucket}/*\"
+      \\\"Action\\\": \\\"s3:*\\\",
+      \\\"Resource\\\": [
+        \\\"arn:aws:s3:::${bucket}\\\",
+        \\\"arn:aws:s3:::${bucket}/*\\\"
       ]
     }
   ]
