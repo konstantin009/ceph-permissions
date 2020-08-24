@@ -44,21 +44,21 @@ spec:
                           echo "ERROR: buckets_list parameter is empty"
                           exit 1
                       else
-                          for bucket in ${buckets[@]}; do 
-                              if [[ ${#read_users[@]} -eq 0 ]]; then
-                                  echo "NOTICE: No users with read permissions are specified"
-                              else
-                                  for user in ${read_users[@]}; do
-                                      read_principals="${read_principals}\"arn:aws:iam:::user/${user}\",\n"
-                                  done
-                              fi
-                              if [[ ${#readwrite_users[@]} -eq 0 ]]; then
-                                  echo "NOTICE: No users with read&write permissions are specified"
-                              else
-                                  for user in ${readwrite_users[@]}; do
-                                      readwrite_principals="${readwrite_principals}\"arn:aws:iam:::user/${user}\",\n"
-                                  done
-                              fi
+                          if [[ ${#read_users[@]} -eq 0 ]]; then
+                              echo "NOTICE: No users with read permissions are specified"
+                          else
+                              for user in ${read_users[@]}; do
+                                  read_principals="${read_principals}\"arn:aws:iam:::user/${user}\",\n"
+                              done
+                          fi
+                          if [[ ${#readwrite_users[@]} -eq 0 ]]; then
+                              echo "NOTICE: No users with read&write permissions are specified"
+                          else
+                              for user in ${readwrite_users[@]}; do
+                                  readwrite_principals="${readwrite_principals}\"arn:aws:iam:::user/${user}\",\n"
+                              done
+                          fi
+                          for bucket in ${buckets[@]}; do
                               echo """
 { 
   "Version": "2012-10-17",
