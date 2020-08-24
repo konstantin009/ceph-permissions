@@ -39,9 +39,9 @@ spec:
             steps {
                 sh '''
                         #!/bin/bash
-                        IFS=' ' read -ra objects <<< "${objects_list}"
-                        IFS=' ' read -ra read_users <<< "${read_users_list}"
-                        IFS=' ' read -ra readwrite_users <<< "${readwrite_users_list}"
+                        readarray -td, objects <<<${objects_list}; declare -p objects
+                        readarray -td, read_users <<<${read_users_list}; declare -p objects
+                        readarray -td, readwrite_users <<<${readwrite_users_list}; declare -p objects
                         if [[ ${#objects[@]} -eq 0 ]]; then
                             echo "ERROR: object_list parameter is empty"
                             exit 1
