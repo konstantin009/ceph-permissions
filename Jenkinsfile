@@ -34,12 +34,9 @@ spec:
                 container('inbound-agent-s3cmd') {
                     sh '''#!/bin/bash
                           set -x
-                          readarray -td' ' buckets <<<${buckets_list}; declare -p buckets
-                          readarray -td' ' read_users <<<${read_users_list}; declare -p read_users
-                          readarray -td' ' readwrite_users <<<${readwrite_users_list}; declare -p readwrite_users
-                          IFS=' ' read -r -a array <<< ${buckets_list}
-                          echo ${#array[@]}
-                          echo ${#buckets[@]}
+                          IFS=' ' read -r -a buckets <<< ${buckets_list}
+                          IFS=' ' read -r -a read_users <<< ${read_users_list}
+                          IFS=' ' read -r -a readwrite_users <<< ${readwrite_users_list}
                           if [[ ${#buckets[@]} -eq 0 ]]; then
                               echo "ERROR: buckets_list parameter is empty"
                               exit 1
@@ -70,7 +67,7 @@ spec:
       \\\"Effect\\\":  \\\"Allow\\\",
       \\\"Principal\\\":  {
         \\\"AWS\\\":  [
-$(echo -e $read_principals | sed 's/ //')
+          $read_principals
         ]
       },
       \\\"Action\\\": [
@@ -91,7 +88,7 @@ $(echo -e $read_principals | sed 's/ //')
       \\\"Effect\\\":  \\\"Allow\\\",
       \\\"Principal\\\":  {
         \\\"AWS\\\":  [
-$(echo -e $readwrite_principals | sed 's/ //')
+          $readwrite_principals
         ]
       },
       \\\"Action\\\": \\\"s3:*\\\",
