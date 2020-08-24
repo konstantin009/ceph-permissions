@@ -46,7 +46,7 @@ spec:
                               else
                                   read_principals="\\"arn:aws:iam:::user/${read_users[0]}\\""
                                   for (( i=1; i<${#read_users[@]}; i++ )); do
-                                      read_principals="${readwrite_principals},\\"arn:aws:iam:::user/${read_users[$i]}\\""
+                                      read_principals="${read_principals},\\"arn:aws:iam:::user/${read_users[$i]}\\""
                                   done
                                   
                               fi
@@ -67,7 +67,7 @@ spec:
       \\\"Effect\\\":  \\\"Allow\\\",
       \\\"Principal\\\":  {
         \\\"AWS\\\":  [
-$(echo -e $read_principals)
+$(echo -e $read_principals | sed 's/ //')
         ]
       },
       \\\"Action\\\": \\\"s3:GetObject\\\",
@@ -80,7 +80,7 @@ $(echo -e $read_principals)
       \\\"Effect\\\":  \\\"Allow\\\",
       \\\"Principal\\\":  {
         \\\"AWS\\\":  [
-$(echo -e $readwrite_principals)
+$(echo -e $readwrite_principals | sed 's/ //')
         ]
       },
       \\\"Action\\\": \\\"s3:*\\\",
