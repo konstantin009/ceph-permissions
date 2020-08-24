@@ -44,17 +44,17 @@ spec:
                               if [[ ${#read_users[@]} -eq 0 ]]; then
                                   echo "NOTICE: No users with read permissions are specified"
                               else
-                                  read_principals=" \\"arn:aws:iam:::user/${read_users[0]}\\" "
+                                  read_principals="\\"arn:aws:iam:::user/${read_users[0]}\\""
                                   for (( i=1; i<${#read_users[@]}; i++ )); do
-                                      read_principals=" ${read_principals},\n\\"arn:aws:iam:::user/${read_users[$i]}\\" "
+                                      read_principals="${read_principals}, \\"arn:aws:iam:::user/${read_users[$i]}\\""
                                   done
                               fi
                               if [[ ${#readwrite_users[@]} -eq 0 ]]; then
                                   echo "NOTICE: No users with read&write permissions are specified"
                               else
-                                  readwrite_principals=" \\"arn:aws:iam:::user/${readwrite_users[0]}\\" 
+                                  readwrite_principals="\\"arn:aws:iam:::user/${readwrite_users[0]}\\""
                                   for (( i=1; i<${#readwrite_users[@]}; i++ )); do
-                                      readwrite_principals=" ${readwrite_principals},\n\\"arn:aws:iam:::user/${readwrite_users[$i]}\\" "
+                                      readwrite_principals="${readwrite_principals}, \\"arn:aws:iam:::user/${readwrite_users[$i]}\\""
                                   done
                               fi
                               for bucket in ${buckets[@]}; do
@@ -66,7 +66,7 @@ spec:
       \\\"Effect\\\":  \\\"Allow\\\",
       \\\"Principal\\\":  {
         \\\"AWS\\\":  [
-$(echo -e $read_principals)
+          $read_principals
         ]
       },
       \\\"Action\\\": \\\"s3:GetObject\\\",
@@ -79,7 +79,7 @@ $(echo -e $read_principals)
       \\\"Effect\\\":  \\\"Allow\\\",
       \\\"Principal\\\":  {
         \\\"AWS\\\":  [
-$(echo -e $readwrite_principals)
+          $readwrite_principals
         ]
       },
       \\\"Action\\\": \\\"s3:*\\\",
