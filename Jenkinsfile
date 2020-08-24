@@ -67,7 +67,7 @@ spec:
       \\\"Effect\\\":  \\\"Allow\\\",
       \\\"Principal\\\":  {
         \\\"AWS\\\":  [
-          $read_principals
+$(echo -e $read_principals)
         ]
       },
       \\\"Action\\\": \\\"s3:GetObject\\\",
@@ -80,7 +80,7 @@ spec:
       \\\"Effect\\\":  \\\"Allow\\\",
       \\\"Principal\\\":  {
         \\\"AWS\\\":  [
-          $readwrite_principals
+$(echo -e $readwrite_principals)
         ]
       },
       \\\"Action\\\": \\\"s3:*\\\",
