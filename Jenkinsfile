@@ -47,7 +47,7 @@ spec:
                                   read_principals="\\"arn:aws:iam:::user/${read_users[0]}\\""
                                   for (( i=1; i<${#read_users[@]}; i++ )); do
                                       user="\\"arn:aws:iam:::user/${read_users[$i]}\\""
-                                      read_principals="${read_principals}, \\"arn:aws:iam:::user/${user}\\""
+                                      read_principals="${read_principals}, ${user}"
                                   done
                               fi
                               if [[ ${#readwrite_users[@]} -eq 0 ]]; then
