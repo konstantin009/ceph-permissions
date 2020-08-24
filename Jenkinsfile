@@ -38,11 +38,13 @@ spec:
             }
             steps {
                 sh '''
-                        a=${objects_list}
-                        IFS=";"; read -r arraya <<EOF
-$a
-EOF
-                        echo ${#arraya[@]}
+//                        a=${objects_list}
+//                        IFS=";"; read -r arraya <<EOF
+//$a
+//EOF
+//                        echo ${#arraya[@]}
+                          objects=("$(echo ${objects_list} | sed 's/,/ /g'")
+                          echo ${#objects[@]}
                 '''
             }
         }
