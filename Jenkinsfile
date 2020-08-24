@@ -38,7 +38,7 @@ spec:
             }
             steps {
                 sh '''
-                          objects=("$(echo ${objects_list} | sed 's/,/ /g'")
+                          objects=("$(echo ${objects_list} | sed 's/,/ /g'"))
                           echo ${#objects[@]}
                 '''
             }
