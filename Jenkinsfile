@@ -59,39 +59,39 @@ spec:
                               for bucket in ${buckets[@]}; do
                                   echo """
 { 
-  "Version": "2012-10-17",
-  "Statement": [
+  \"Version\": \"2012-10-17\",
+  \"Statement\": [
     {
-      "Effect":  "Allow",
-      "Principal":  {
-        "AWS":  [
+      \"Effect\":  \"Allow\",
+      \"Principal\":  {
+        \"AWS\":  [
 $(echo -e $read_principals)
         ]
       },
-      "Action": "s3:GetObject",
-      "Resource": [
-        "arn:aws:s3:::${bucket}",
-        "arn:aws:s3:::${bucket}/*"
+      \"Action\": \"s3:GetObject\",
+      \"Resource\": [
+        \"arn:aws:s3:::${bucket}\",
+        \"arn:aws:s3:::${bucket}/*\"
       ]
     },
     {
-      "Effect":  "Allow",
-      "Principal":  {
-        "AWS":  [
+      \"Effect\":  \"Allow\",
+      \"Principal\":  {
+        \"AWS\":  [
 $(echo -e $readwrite_principals)
         ]
       },
-      "Action": "s3:*",
-      "Resource": [
-        "arn:aws:s3:::${bucket}",
-        "arn:aws:s3:::${bucket}/*"
+      \"Action\": \"s3:*\",
+      \"Resource\": [
+        \"arn:aws:s3:::${bucket}\",
+        \"arn:aws:s3:::${bucket}/*\"
       ]
     }
   ]
 }
 """ > ${bucket}_policy.txt
-                              cat ${bucket}_policy.txt
-                              s3cmd setpolicy --no-check-certificate --host=${aws_host} --host-bucket=s3://${bucket} ${bucket}_policy.txt s3://${bucket}
+                                  cat ${bucket}_policy.txt
+                                  s3cmd setpolicy --no-check-certificate --host=${aws_host} --host-bucket=s3://${bucket} ${bucket}_policy.txt s3://${bucket}
                               done
                           fi
                     '''
