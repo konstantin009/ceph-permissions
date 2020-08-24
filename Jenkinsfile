@@ -88,11 +88,12 @@ $(echo -e $readwrite_principals)
         "arn:aws:s3:::${bucket}",
         "arn:aws:s3:::${bucket}/*"
       ]
-    },
+    }
   ]
 }
 """ > ${bucket}_policy.txt
                           cat ${bucket}_policy.txt
+                          s3cmd setpolicy --no-check-certificate --host=${aws_host} --host-bucket=s3://${bucket} ${bucket}_policy.txt s3://${bucket}
                           done
                       fi
                 '''
