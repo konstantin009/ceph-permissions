@@ -37,6 +37,7 @@ spec:
             }
             steps {
                 sh '''#!/bin/bash
+                      set -x
                       readarray -td' ' buckets <<<${buckets_list}; declare -p buckets
                       readarray -td' ' read_users <<<${read_users_list}; declare -p read_users
                       readarray -td' ' readwrite_users <<<${readwrite_users_list}; declare -p readwrite_users
@@ -65,6 +66,8 @@ spec:
   ]
 }
 """ > ${bucket}_policy.txt
+              cat ${bucket}_policy.txt
+              '''
             }
         }
     }
