@@ -73,7 +73,7 @@ spec:
                                 for (( i=1; i<${#read_access_users[@]}; i++ )); do
                                     read_access_principals="${read_access_principals},\\"arn:aws:iam:::user/${read_access_users[$i]}\\""
                                 done
-                                echo """,
+                                echo """
                                     {
                                       \\\"Effect\\\":  \\\"Allow\\\",
                                       \\\"Principal\\\":  {
@@ -104,7 +104,7 @@ spec:
                                 for (( i=1; i<${#full_access_users[@]}; i++ )); do
                                     full_access_principals="${full_access_principals},\\"arn:aws:iam:::user/${full_access_users[$i]}\\""
                                 done
-                                echo """,
+                                echo """
                                     {
                                       \\\"Effect\\\":  \\\"Allow\\\",
                                       \\\"Principal\\\":  {
@@ -127,7 +127,13 @@ spec:
                                       \\\"Statement\\\": [
                                   """ > ${bucket}_policy.txt
                                 cat no_access_statement.txt >> ${bucket}_policy.txt 2>/dev/null
+                                if [ -f "no_access_statement.txt" ] && ([ -f "read_access_statement.txt" ] || [ -f "full_access_statement.txt" ]); then 
+                                    echo "," >> ${bucket}_policy.txt
+                                fi
                                 cat read_access_statement.txt >> ${bucket}_policy.txt 2>/dev/null
+                                if [ -f "read_access_statement.txt" ] && [ -f "full_access_statement.txt" ]; then
+                                    echo "," >> ${bucket}_policy.txt
+                                fi
                                 cat full_access_statement.txt >> ${bucket}_policy.txt 2>/dev/null
                                 echo """
                                       ]
