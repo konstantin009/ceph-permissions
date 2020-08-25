@@ -126,13 +126,13 @@ spec:
                                       \\\"Version\\\": \\\"2012-10-17\\\",
                                       \\\"Statement\\\": [
                                   """ > ${bucket}_policy.txt
-                                cat no_access_statement.txt > ${bucket}_policy.txt 2>/dev/null
-                                cat read_access_statement.txt > ${bucket}_policy.txt 2>/dev/null
-                                cat full_access_statement.txt > ${bucket}_policy.txt 2>/dev/null
+                                cat no_access_statement.txt >> ${bucket}_policy.txt 2>/dev/null
+                                cat read_access_statement.txt >> ${bucket}_policy.txt 2>/dev/null
+                                cat full_access_statement.txt >> ${bucket}_policy.txt 2>/dev/null
                                 echo """
                                       ]
                                     }
-                                  """ > ${bucket}_policy.txt
+                                  """ >> ${bucket}_policy.txt
                                 cat ${bucket}_policy.txt
                             done
                         fi
