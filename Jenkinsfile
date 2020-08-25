@@ -60,8 +60,8 @@ spec:
                                       },
                                       \\\"Action\\\": \\\"s3:*\\\",
                                       \\\"Resource\\\": [
-                                        \\\"arn:aws:s3:::${bucket}\\\",
-                                        \\\"arn:aws:s3:::${bucket}/*\\\"
+                                        \\\"arn:aws:s3:::BUCKET\\\",
+                                        \\\"arn:aws:s3:::BUCKET/*\\\"
                                       ]
                                     }
                                   """ > no_access_statement.txt
@@ -91,8 +91,8 @@ spec:
                                         \\\"s3:GetBucketAcl\\\"
                                         ],
                                       \\\"Resource\\\": [
-                                        \\\"arn:aws:s3:::${bucket}\\\",
-                                        \\\"arn:aws:s3:::${bucket}/*\\\"
+                                        \\\"arn:aws:s3:::BUCKET\\\",
+                                        \\\"arn:aws:s3:::BUCKET/*\\\"
                                       ]
                                     }
                                   """ > read_access_statement.txt
@@ -114,8 +114,8 @@ spec:
                                       },
                                       \\\"Action\\\": \\\"s3:*\\\",
                                       \\\"Resource\\\": [
-                                        \\\"arn:aws:s3:::${bucket}\\\",
-                                        \\\"arn:aws:s3:::${bucket}/*\\\"
+                                        \\\"arn:aws:s3:::BUCKET\\\",
+                                        \\\"arn:aws:s3:::BUCKET/*\\\"
                                       ]
                                     }
                                   """ > full_access_statement.txt
@@ -139,8 +139,8 @@ spec:
                                       ]
                                     }
                                   """ >> ${bucket}_policy.txt
+                                sed -i "s/BUCKET/${bucket}/g" ${bucket}_policy.txt
                                 cat ${bucket}_policy.txt
-                                s3cmd setpolicy --no-check-certificate --host=${aws_host} --host-bucket=s3://${bucket} ${bucket}_policy.txt s3://${bucket}
                             done
                         fi
                     '''
