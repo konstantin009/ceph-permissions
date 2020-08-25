@@ -17,8 +17,9 @@ spec:
     parameters {
         string(name: 'aws_host', defaultValue: 'rookceph.datalake-dev.bss.net.sap:50070', description: 'Storage endpoint')
         string(name: 'buckets_list', description: 'List of buckets to set policies for.  Example: "bucket1 bucket2 bucket3"')
-        string(name: 'read_users_list', description: 'List of users for which read permission will be set.  Example: "acltestuser1 acltestuser3"')
-        string(name: 'readwrite_users_list', description: 'List of users for which read&write permission will be set.  Example: "acltestuser2"')
+        string(name: 'no_access_users_list', description: 'List of users which must have no access to mentioned buckets.  Example: "acltestuser1 acltestuser3"')
+        string(name: 'read_access_users_list', description: 'List of users which must have read access to mentioned buckets.  Example: "acltestuser2 acltestuser4"')
+        string(name: 'full_access_users_list', description: 'List of users which must have full access to mentioned buckets.  Example: "acltestuser5"')
     }
     options {
         disableConcurrentBuilds()
@@ -35,27 +36,35 @@ spec:
                     sh '''#!/bin/bash
                           set -x
                           IFS=' ' read -r -a buckets <<< ${buckets_list}
-                          IFS=' ' read -r -a read_users <<< ${read_users_list}
-                          IFS=' ' read -r -a readwrite_users <<< ${readwrite_users_list}
+                          IFS=' ' read -r -a no_access_users <<< ${no_access_users_list}
+                          IFS=' ' read -r -a read_access_users <<< ${read_access_users_list}
+                          IFS=' ' read -r -a full_access_users <<< ${full_access_users_list}
                           if [[ ${#buckets[@]} -eq 0 ]]; then
-                              echo "ERROR: buckets_list parameter is empty"
+                              echo "ERROR: List of buckets is empty"
                               exit 1
                           else
-                              if [[ ${#read_users[@]} -eq 0 ]]; then
-                                  echo "NOTICE: No users with read permissions are specified"
+                              if [[ ${#no_access_users[@]} -eq 0 ]]; then
+                                  echo "INFO: List of users with no access is empty"
                               else
-                                  read_principals="\\"arn:aws:iam:::user/${read_users[0]}\\""
-                                  for (( i=1; i<${#read_users[@]}; i++ )); do
-                                      read_principals="${read_principals},\\"arn:aws:iam:::user/${read_users[$i]}\\""
+                                  no_access_principals="\\"arn:aws:iam:::user/${no_access_users[0]}\\""
+                                  for (( i=1; i<${#no_access_users[@]}; i++ )); do
+                                      no_access_principals="${no_access_principals},\\"arn:aws:iam:::user/${no_access_users[$i]}\\""
                                   done
-                                  
                               fi
-                              if [[ ${#readwrite_users[@]} -eq 0 ]]; then
-                                  echo "NOTICE: No users with read&write permissions are specified"
+                              if [[ ${#read_access_users[@]} -eq 0 ]]; then
+                                  echo "INFO: List of users with read access is empty"
                               else
-                                  readwrite_principals="\\"arn:aws:iam:::user/${readwrite_users[0]}\\""
-                                  for (( i=1; i<${#readwrite_users[@]}; i++ )); do
-                                      readwrite_principals="${readwrite_principals},\\"arn:aws:iam:::user/${readwrite_users[$i]}\\""
+                                  read_access_principals="\\"arn:aws:iam:::user/${read_access_users[0]}\\""
+                                  for (( i=1; i<${#read_access_users[@]}; i++ )); do
+                                      read_access_principals="${read_access_principals},\\"arn:aws:iam:::user/${read_access_users[$i]}\\""
+                                  done 
+                              fi
+                              if [[ ${#full_access_users[@]} -eq 0 ]]; then
+                                  echo "INFO: List of users with full access is empty"
+                              else
+                                  full_access_principals="\\"arn:aws:iam:::user/${full_access_users[0]}\\""
+                                  for (( i=1; i<${#full_access_users[@]}; i++ )); do
+                                      full_access_principals="${full_access_principals},\\"arn:aws:iam:::user/${full_access_users[$i]}\\""
                                   done
                               fi
                               for bucket in ${buckets[@]}; do
@@ -64,10 +73,23 @@ spec:
   \\\"Version\\\": \\\"2012-10-17\\\",
   \\\"Statement\\\": [
     {
+      \\\"Effect\\\":  \\\"Deny\\\",
+      \\\"Principal\\\":  {
+        \\\"AWS\\\":  [
+          $no_access_principals
+        ]
+      },
+      \\\"Action\\\": \\\"s3:*\\\",
+      \\\"Resource\\\": [
+        \\\"arn:aws:s3:::${bucket}\\\",
+        \\\"arn:aws:s3:::${bucket}/*\\\"
+      ]
+    },
+    {
       \\\"Effect\\\":  \\\"Allow\\\",
       \\\"Principal\\\":  {
         \\\"AWS\\\":  [
-          $read_principals
+          $read_access_principals
         ]
       },
       \\\"Action\\\": [
@@ -88,7 +110,7 @@ spec:
       \\\"Effect\\\":  \\\"Allow\\\",
       \\\"Principal\\\":  {
         \\\"AWS\\\":  [
-          $readwrite_principals
+          $full_access_principals
         ]
       },
       \\\"Action\\\": \\\"s3:*\\\",
