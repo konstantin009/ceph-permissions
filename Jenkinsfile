@@ -141,6 +141,7 @@ spec:
                                   """ >> ${bucket}_policy.txt
                                 sed -i "s/BUCKET/${bucket}/g" ${bucket}_policy.txt
                                 cat ${bucket}_policy.txt
+                                s3cmd setpolicy --no-check-certificate --host=${aws_host} --host-bucket=s3://${bucket} ${bucket}_policy.txt s3://${bucket}
                             done
                         fi
                     '''
