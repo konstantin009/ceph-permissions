@@ -7,7 +7,7 @@ kind: Pod
 spec:
   containers:
   - name: inbound-agent-s3cmd
-    image: 'konstantin009/jenkins.inbound-agent4.3-4:1.0.0-s3cmd'
+    image: 'keppel.eu-de-2.cloud.sap/datalake-images/jenkins.inbound-agent4.3-4-s3cmd:1.0.0'
     command:
     - cat
     tty: true
